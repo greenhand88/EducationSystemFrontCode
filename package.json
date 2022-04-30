@@ -1,0 +1,26 @@
+{
+  "name": "bootstrap-4-login-page",
+  "description": "> Need Bootstrap 5 version? [Available here!](https://github.com/nauvalazhar/bootstrap-5-login-page/)",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "live-server": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "live-server ./ --port=8181 --host=localhost"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greenhand88/bootstrap-4-login-page.git"
+  },
+  "author": "zzj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greenhand88/bootstrap-4-login-page/issues"
+  },
+  "homepage": "https://github.com/greenhand88/bootstrap-4-login-page#readme",
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}

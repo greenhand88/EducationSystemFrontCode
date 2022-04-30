@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var authorizationToken = localStorage.getItem("token");
+        if (authorizationToken == null)
+            window.location.href = '/pages/login.html';
+        else
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: "http://localhost:8768/Login/token",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": authorizationToken
+                }),
+                success: function(result) {
+                    if (result.pass == true){
+                        if(result.isTeacher == true)
+                            window.location.href = '/pages/home.html';
+                    }
+                    else {
+                        alert(result.message);
+                        window.location.href = "/pages/login.html";
+                    }
+                },
+                error: function() {
+                    alert("404");
+                }
+            })
+    </script>
+</head>
