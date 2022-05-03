@@ -1,8 +1,12 @@
+<html lang="zh-CN">
+
 <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript">
         var token = localStorage.getItem("token");
         if (token == null) {
@@ -15,117 +19,255 @@
                 headers: {
                     "Access-Control-Allow-Origin": "*"
                 },
-                url: "http://120.24.227.178:10086/account/api/getUserName",
+                url: "http://localhost:8686/TEACHER/getName",
                 contentType: "application/json",
                 data: JSON.stringify({
                     "token": token
                 }),
                 success: function(result) {
-                    $('#puserName').html(result.message);
-                    $('#userName').html(result.message);
-                },
-                error: function(result) {
-                    alert(result);
+                    if (result != null)
+                        document.getElementById("SName").innerHTML = result.name + "老师,欢迎使用作业提交系统";
+                    else {
+                        alert("令牌过期,请重新登录!")
+                        window.location.href = 'login.html';
+                    }
                 }
             })
     </script>
+    <title>教师管理页面</title>
+    <style>
+        body {
+            background: url("https://source.unsplash.com/random");
+            background-size: cover;
+        }
+    </style>
 </head>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
 
-        <form class="form-inline my-2 my-lg-0" style="text-align:center">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Home</a>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label id="userName"></label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="signOut()">Sign Out</button>
-        </form>
-    </div>
-</nav>
-
-<main role="main">
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="display-3">Welcome to Personal Blog!</h1>
-            <p id="puserName"></p>
-        </div>
-    </div>
-    <div class="container">
-        <!-- Example row of columns -->
+<body>
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <h2>Heading</h2>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                </p>
-                <p>
-                    <a class="btn btn-secondary" href="#" role="button">View details &raquo;</a>
-                </p>
+                <div class="btn-group-lg btn-group" role="group">
+                    <button type="button" class="btn btn-info" onclick="getAClass()">
+                    我教的所有课程
+                </button>
+                    <button type="button" class="btn btn-primary" onclick="getAHW()">
+                    列出布置的所有作业
+                </button>
+                </div>
             </div>
             <div class="col-md-4">
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet
-                    risus.
-                </p>
-                <p>
-                    <a class="btn btn-secondary" href="#" role="button">View details &raquo;</a>
-                </p>
+                <h3 class="text-white text-center" id="SName">
+                    老师,欢迎使用作业提交系统
+                </h3>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" id="signOut" onclick="signOut()">
+                            登出
+                    </button>
+                </div>
+            </div>
+            <div class="row" style="height: 250px"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+
+                <table class="table table-sm table-hover text-white" id="tableAjax"></table>
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form role="form" enctype="multipart/form-data" id="hForm" name='hForm' method="post">
+                    <div class="form-inline">
+                        <label for="exampleInputEmail1" class="text-white">
+                                作业编号:
+                        </label>
+                        <input class="form-control" id="hid" name="hid" />
+                        <div class="row" style="width: 50px"></div>
+                        <button type="button" class="btn btn-primary" onclick="postHomework()">
+                            查询
+                    </button>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <hr>
-
     </div>
-    <!-- /container -->
-    <script type="text/javascript">
-        function signOut() {
-            var token = localStorage.getItem("token");
-            if (token == null) {
-                window.location.href = 'login.html';
-            } else
-                $.ajax({
-                    type: 'POST',
-                    dataType: "json",
-                    headers: {
-                        "Access-Control-Allow-Origin": "*"
-                    },
-                    url: "http://120.24.227.178:10086/account/api/signOut",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        "token": token
-                    }),
-                    success: function(result) {
-                        localStorage.removeItem("token");
-                        alert(result.message);
-                        location.href = "login.html";
-                    },
-                    error: function(result) {
-                        localStorage.removeItem("token");
-                        alert(result);
-                        location.href = "login.html";
-                    }
-                })
-        }
-    </script>
 
+</body>
+<!-- /container -->
+<script type="text/javascript">
+    function signOut() {
+        var token = localStorage.getItem("token");
+        if (token == null) {
+            alert("token过期!请重新登录!");
+            window.location.href = 'login.html';
+        } else
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: "http://localhost:8686/LOGIN/signOut",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": token
+                }),
+                success: function(result) {
+                    localStorage.removeItem("token");
+                    alert("登出成功");
+                    location.href = "login.html";
+                },
+                error: function(result) {
+                    localStorage.removeItem("token");
+                    alert("登出成功");
+                    location.href = "login.html";
+                }
+            })
+    }
+</script>
+<script type="text/javascript">
+    function getAHW() {
+        var token = localStorage.getItem("token");
+        if (token == null) {
+            alert("token过期!请重新登录!");
+            window.location.href = 'login.html';
+        } else
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: "http://localhost:8686/TEACHER/getHomework",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": token
+                }),
+                success: function(result) {
+                    createTable(result);
+                },
+                error: function(result) {
+                    alert("error!请联系管理员!");
+                }
+            })
+
+    }
+</script>
+<script type="text/javascript">
+    function getAClass() {
+        var token = localStorage.getItem("token");
+        if (token == null) {
+            alert("token过期!请重新登录!");
+            window.location.href = 'login.html';
+        } else
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": token
+                }),
+                url: "http://localhost:8686/TEACHER/getClassInfor",
+                success: function(result) {
+                    createAClassTable(result);
+                },
+                error: function(result) {
+                    alert("error!请联系管理员!");
+                }
+            })
+
+    }
+</script>
+<script>
+    function createTable(data) {
+        var tableStr = "<table class='tab-list' width='99%'>";
+        tableStr = tableStr +
+            "<tr class='list-header'>" +
+            "<td width='5%'>id</td>" +
+            "<td width='20%'>作业编号</td>" +
+            "<td width='30%'>作业内容</td>" +
+            "</tr>";
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td>" + data[i].hid + "</td>" +
+                "<td>" + data[i].content + "</td>" +
+                "</tr>";
+        }
+        if (len == 0) {
+            tableStr = tableStr + "<tr style='text-align: center'>" +
+                "<td colspan='6'><font color='#cd0a0a'>" + "暂无记录" + "</font></td>" +
+                "</tr>";
+        }
+        tableStr = tableStr + "</table>";
+        //添加到div中  
+        $("#tableAjax").html(tableStr);
+    }
+</script>
+<script>
+    function createAClassTable(data) {
+        var tableStr = "<table class='tab-list' width='99%'>";
+        tableStr = tableStr +
+            "<tr class='list-header'>" +
+            "<td width='5%'>id</td>" +
+            "<td width='10%'>课程ID</td>" +
+            "<td width='20%'>课程名称</td>" +
+            "</tr>";
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td>" + data[i].cid + "</td>" +
+                "<td>" + data[i].cname + "</td>" +
+                "</tr>";
+        }
+        if (len == 0) {
+            tableStr = tableStr + "<tr style='text-align: center'>" +
+                "<td colspan='6'><font color='#cd0a0a'>" + "暂无记录" + "</font></td>" +
+                "</tr>";
+        }
+        tableStr = tableStr + "</table>";
+        //添加到div中  
+        $("#tableAjax").html(tableStr);
+    }
+</script>
+<script type="text/javascript">
+    function postHomework() {
+        var token = localStorage.getItem("token");
+        var formData = new FormData($('#hForm')[0]);
+        formData.append('token', token);
+        if (token == null) {
+            alert("token过期!请重新登录!");
+            window.location.href = 'login.html';
+        } else
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8686/HOMEWORK/postHomeWork",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(result) {
+                    alert("作业提交成功");
+                },
+                error: function(result) {
+                    alert("error!请联系管理员!");
+                }
+            })
+    }
+</script>
 </main>
+
+</html>
