@@ -54,6 +54,9 @@
                     <button type="button" class="btn btn-primary" onclick="getAHW()">
                     列出布置的所有作业
                 </button>
+                    <button type="button" class="btn btn-success" onclick="disp_prompt()">
+                    布置作业
+                </button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -85,18 +88,16 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <form role="form" enctype="multipart/form-data" id="hForm" name='hForm' method="post">
-                    <div class="form-inline">
-                        <label for="exampleInputEmail1" class="text-white">
+                <div class="form-inline">
+                    <label for="exampleInputEmail1" class="text-white">
                                 作业编号:
                         </label>
-                        <input class="form-control" id="hid" name="hid" />
-                        <div class="row" style="width: 50px"></div>
-                        <button type="button" class="btn btn-primary" onclick="postHomework()">
+                    <input class="form-control" id="hid" name="hid" />
+                    <div class="row" style="width: 50px"></div>
+                    <button type="button" class="btn btn-primary" onclick="disp_prompt()">
                             查询
                     </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -177,11 +178,41 @@
                 },
                 contentType: "application/json",
                 data: JSON.stringify({
-                    "token": token
+                    "token": token,
                 }),
                 url: "http://localhost:8686/TEACHER/getClassInfor",
                 success: function(result) {
                     createAClassTable(result);
+                },
+                error: function(result) {
+                    alert("error!请联系管理员!");
+                }
+            })
+
+    }
+</script>
+<script type="text/javascript">
+    function getCondition() {
+        var token = localStorage.getItem("token");
+        var hid = document.getElementById("hid").value;
+        if (token == null) {
+            alert("token过期!请重新登录!");
+            window.location.href = 'login.html';
+        } else
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: "http://localhost:8686/TEACHER/getSpecialCondition",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": token,
+                    "hid": hid
+                }),
+                success: function(result) {
+                    createConditionTable(result);
                 },
                 error: function(result) {
                     alert("error!请联系管理员!");
@@ -245,29 +276,70 @@
     }
 </script>
 <script type="text/javascript">
-    function postHomework() {
-        var token = localStorage.getItem("token");
-        var formData = new FormData($('#hForm')[0]);
-        formData.append('token', token);
-        if (token == null) {
-            alert("token过期!请重新登录!");
-            window.location.href = 'login.html';
-        } else
-            $.ajax({
-                type: 'POST',
-                url: "http://localhost:8686/HOMEWORK/postHomeWork",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(result) {
-                    alert("作业提交成功");
-                },
-                error: function(result) {
-                    alert("error!请联系管理员!");
-                }
-            })
+    function createConditionTable(data) {
+        var tableStr = "<table class='tab-list' width='99%'>";
+        tableStr = tableStr +
+            "<tr class='list-header'>" +
+            "<td width='5%'>id</td>" +
+            "<td width='10%'>学号</td>" +
+            "<td width='20%'>学生姓名</td>" +
+            "</tr>";
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td>" + data[i].sid + "</td>" +
+                "<td>" + data[i].sname + "</td>" +
+                "</tr>";
+        }
+        if (len == 0) {
+            tableStr = tableStr + "<tr style='text-align: center'>" +
+                "<td colspan='6'><font color='#cd0a0a'>" + "暂无记录" + "</font></td>" +
+                "</tr>";
+        }
+        tableStr = tableStr + "</table>";
+        //添加到div中  
+        $("#tableAjax").html(tableStr);
     }
 </script>
+
+<script>
+    function disp_prompt() {
+
+        var token = localStorage.getItem("token");
+        if (token == null) {
+            alert("令牌过期,请重新登录!")
+            window.location.href = 'login.html';
+        } else {
+            var cid = prompt("请输入课头号", "");
+            var hw = prompt("请输入作业内容", ""); // 弹出input框
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: "http://localhost:8686/TEACHER/putHomework",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "token": token,
+                    "cid": cid,
+                    "content": hw
+                }),
+                success: function(result) {
+                    if (result != null)
+                        document.getElementById("SName").innerHTML = result.name + "老师,欢迎使用作业提交系统";
+                    else {
+                        alert("令牌过期,请重新登录!")
+                        window.location.href = 'login.html';
+                    }
+                }
+            })
+        }
+
+    }
+</script>
+
 </main>
 
 </html>
